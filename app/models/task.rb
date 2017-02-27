@@ -14,6 +14,8 @@ class Task
   delegate :effective_date, :to => :product_test
   delegate :bundle, :to => :product_test
 
+  index product_test_id: 1
+
   %w(
     C1Task C1ChecklistTask C3ChecklistTask C2Task C3Cat1Task
     C3Cat3Task Cat1FilterTask Cat3FilterTask
@@ -55,6 +57,8 @@ class Task
   # returns the most recent execution for this task
   # if there are none, returns nil
   def most_recent_execution
-    test_executions.any? ? test_executions.order_by(created_at: 'desc').limit(1).first : nil
+    Rails.cache.fetch("#{cache_key}/most_recent_execution") do
+      test_executions.any? ? test_executions.order_by(created_at: 'desc').limit(1).first : nil
+    end
   end
 end

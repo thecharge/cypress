@@ -14,20 +14,24 @@ class VendorsController < ApplicationController
   def index
     # get all of the vendors that the user can see
     @vendors = Vendor.accessible_by(current_user).order(:updated_at => :desc) # Vendor.accessible_by(current_user).all.order(:updated_at => :desc)
-    respond_with(@vendors.to_a)
+    respond_with(@vendors.to_a) if stale?(@vendors)
   end
 
   def show
-    add_breadcrumb 'Vendor: ' + @vendor.name, :vendor_path
-    product_arr = Product.where(vendor_id: @vendor.id).order_by(state: 'desc').sort_by { |a| (a.favorite_user_ids.include? current_user.id) ? 0 : 1 }
-    @products_fav = product_arr.select { |p| p.favorite_user_ids.include? current_user.id }
+    if stale?(@vendor)
+      add_breadcrumb 'Vendor: ' + @vendor.name, :vendor_path
+      product_arr = Product.where(vendor_id: @vendor.id)
+                           .order_by(state: 'desc')
+                           .sort_by { |a| (a.favorite_user_ids.include? current_user.id) ? 0 : 1 }
+      @products_fav = product_arr.select { |p| p.favorite_user_ids.include? current_user.id }
 
-    # paginate non-favorites
-    products_nonfav = product_arr.select { |p| !(p.favorite_user_ids.include? current_user.id) }
-    @nonfav_count = products_nonfav.count
-    @products_nonfav = Kaminari.paginate_array(products_nonfav).page(params[:page]).per(5)
-    @products = product_arr
-    respond_with(@vendor)
+      # paginate non-favorites
+      products_nonfav = product_arr.select { |p| !(p.favorite_user_ids.include? current_user.id) }
+      @nonfav_count = products_nonfav.count
+      @products_nonfav = Kaminari.paginate_array(products_nonfav).page(params[:page]).per(5)
+      @products = product_arr
+      respond_with(@vendor)
+    end
   end
 
   def new

@@ -13,7 +13,7 @@ class TestExecutionsController < ApplicationController
 
   def index
     @test_executions = @task.test_executions
-    respond_with(@test_executions.to_a)
+    respond_with(@test_executions.to_a) if stale?(@test_executions)
   end
 
   def create
@@ -41,7 +41,7 @@ class TestExecutionsController < ApplicationController
 
   def show
     authorize! :read, @task.product_test.product.vendor
-    respond_with(@test_execution)
+    respond_with(@test_execution) if stale?(@test_execution)
   end
 
   def destroy

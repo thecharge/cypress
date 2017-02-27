@@ -12,13 +12,13 @@ class ProductsController < ApplicationController
 
   def index
     @products = @vendor.products.sort_by { |a| (a.favorite_user_ids.include? current_user.id) ? 0 : 1 }
-    respond_with(@products.to_a)
+    respond_with(@products.to_a) if stale?(@products)
   end
 
   def show
     add_breadcrumb 'Vendor: ' + @product.vendor.name, vendor_path(@product.vendor_id)
     add_breadcrumb 'Product: ' + @product.name, vendor_product_path(@product.vendor_id, @product)
-    respond_with(@product, &:js)
+    respond_with(@product, &:js) if stale?(@product)
   end
 
   def new

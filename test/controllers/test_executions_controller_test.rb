@@ -295,6 +295,7 @@ class TestExecutionsControllerTest < ActionController::TestCase
       assert_response 201, 'response should be Created on test_execution creation'
       assert_not_nil JSON.parse(response.body)
       assert_equal 'pending', JSON.parse(response.body)['state']
+      @task_cat1.reload
       assert response.location.end_with?(test_execution_path(@task_cat1.most_recent_execution)),
              'response location should be test_execution show'
     end
@@ -307,6 +308,7 @@ class TestExecutionsControllerTest < ActionController::TestCase
       assert_response 201, 'response should be Created on test_execution creation'
       assert_not_nil JSON.parse(response.body)
       assert_equal 'pending', JSON.parse(response.body)['state']
+      @task_cat3.reload
       assert response.location.end_with?(test_execution_path(@task_cat3.most_recent_execution)),
              'response location should be test_execution show'
     end
@@ -321,6 +323,7 @@ class TestExecutionsControllerTest < ActionController::TestCase
       assert_response 201, 'response should be Created on test_execution creation'
       assert_not_nil Hash.from_trusted_xml(response.body)
       assert_equal 'pending', Hash.from_trusted_xml(response.body)['test_execution']['state']
+      @task_cat1.reload
       assert response.location.end_with?(test_execution_path(@task_cat1.most_recent_execution)),
              'response location should be test_execution show'
     end
@@ -333,6 +336,7 @@ class TestExecutionsControllerTest < ActionController::TestCase
       assert_response 201, 'response should be Created on test_execution creation'
       assert_not_nil Hash.from_trusted_xml(response.body)
       assert_equal 'pending', Hash.from_trusted_xml(response.body)['test_execution']['state']
+      @task_cat3.reload
       assert response.location.end_with?(test_execution_path(@task_cat3.most_recent_execution)),
              'response location should be test_execution show'
     end
@@ -415,6 +419,7 @@ class TestExecutionsControllerTest < ActionController::TestCase
       assert_response 201, 'response should be Created on test_execution creation'
       assert_not_nil JSON.parse(response.body)
       assert_equal 'pending', JSON.parse(response.body)['state']
+      @first_task.reload
       assert response.location.end_with?(test_execution_path(@first_task.most_recent_execution)),
              'response location should be test_execution show'
     end
@@ -476,6 +481,7 @@ class TestExecutionsControllerTest < ActionController::TestCase
       assert_response 201, 'response should be Created on test_execution creation'
       assert_not_nil Hash.from_trusted_xml(response.body)
       assert_equal 'pending', Hash.from_trusted_xml(response.body)['test_execution']['state']
+      @first_task.reload
       assert response.location.end_with?(test_execution_path(@first_task.most_recent_execution)),
              'response location should be test_execution show'
     end
