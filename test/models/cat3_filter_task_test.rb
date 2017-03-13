@@ -32,6 +32,7 @@ class Cat3FilterTaskTest < ActiveSupport::TestCase
       te = task.execute(xml, User.first)
       te.reload
       assert_empty te.execution_errors, 'test execution with known good results should not have any errors'
+      assert te.passing?, 'test execution with known good results should pass'
     end
   end
 end
