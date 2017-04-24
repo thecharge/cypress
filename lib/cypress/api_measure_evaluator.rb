@@ -21,6 +21,25 @@ module Cypress
       @password = password
     end
 
+    def get_te_results
+      tes = TestExecution.where(:user_id => User.where(:email => @username).first._id)
+      CSV.open("./tmp/eval_results.csv", "w") do |csv|
+        tes.each do |te|
+          if te.state == :failed
+            measure = te.task.product_test.cms_id
+            te.execution_errors.each do |ee|
+              #binding.pry if ee.message == 'supplemental data error'
+              if ee.validator != :qrda_cat3 && ee.validator != 'qrda_cat3'
+                if ee.msg_type != :warning
+                  csv << [measure,ee.message.delete("\n,"),ee.validator_type,ee.file_name.delete('1234567890 _')]
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+
     def cleanup(*)
       @logger.info 'Cleaning database...'
       Vendor.where(name: /MeasureEvaluationVendor/).destroy_all
@@ -93,9 +112,9 @@ module Cypress
         upload_test_execution(extract_test_execution_link(patient_links[1], 'C2'), patient_links[0].split('/')[2], false, skip_c1_test)
       end
       # sleep(4)
-      download_filter_data
-      calculate_filtered_cat3(bundle_id)
-      upload_c4_test_executions
+      #download_filter_data
+      #calculate_filtered_cat3(bundle_id)
+      #upload_c4_test_executions
       cleanup_hashes
     end
 
@@ -354,7 +373,7 @@ module Cypress
                            c1_test: c1_test,
                            c2_test: '1',
                            c3_test: '1',
-                           c4_test: '1',
+                           c4_test: '0',
                            duplicate_records: '0',
                            randomize_records: '0' } }
       RestClient::Request.execute(:method => :post,

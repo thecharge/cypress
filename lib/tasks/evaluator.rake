@@ -51,4 +51,9 @@ namespace :evaluator do
     api_ev.cleanup
     api_ev.run_measure_eval(true, true)
   end
+
+  task :api_export_results, [:cypress_host, :hqmf_path] => :setup do |_, args|
+    api_ev = Cypress::ApiMeasureEvaluator.new(ENV['USERNAME'], ENV['PASSWORD'], args.to_hash)
+    api_ev.get_te_results
+  end
 end
