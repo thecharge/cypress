@@ -9,9 +9,10 @@
 <% # Convert get_c1_tasks into a boolean if it is a string. %>
 <% get_c1_tasks = get_c1_tasks.eql? "true" if get_c1_tasks.is_a? String %>
 <% tasks = measure_test_tasks(@product, get_c1_tasks) %>
+<% reload_table = false %>
 <% return unless tasks.any? %>
 
-<% first_results_col_label = tasks.first.is_a?(C1Task) ? 'C1 Results' : 'C2 Results' %>
+<% first_results_col_label = get_c1_tasks ? 'C1 Results' : 'C2 Results' %>
 <% include_c3 = @product.c3_test %>
 
 <table class = 'table table-hover measure_tests_table'>
@@ -30,13 +31,16 @@
   <tbody>
     <% tasks.each do |task| %>
       <tr id = '<%= measure_tests_table_row_wrapper_id(task) %>'>
-        <%= render partial: 'measure_tests_table_row', locals: { task: task, parent_reloading: true} %>
+        <% most_recent_execution = task.most_recent_execution || false %>
+        <% sibling_execution = most_recent_execution ? most_recent_execution.sibling_execution : false %>
+        <% reload_table = measure_test_running_for_row?(task, most_recent_execution, sibling_execution) unless reload_table %>
+        <% # Tell the partial that measure_test_running is always false since the parent (us) is handling it %>
+        <%= render partial: 'measure_tests_table_row', locals: { task: task, most_recent_execution: most_recent_execution, sibling_execution: sibling_execution, measure_test_running: false } %>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<% if should_reload_measure_test_table?(tasks) %>
+<% if reload_table %>
   <script>
     $(document).ready(function() {
       $.ajax({url: "<%= request.env['PATH_INFO'] %>", type: "GET", dataType: 'script', data: { partial: 'measure_tests_table', should_include_c1: "<%= get_c1_tasks %>", html_id: "<%= html_id %>" }});

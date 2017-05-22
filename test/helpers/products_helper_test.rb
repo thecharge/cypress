@@ -177,33 +177,34 @@ class ProductsHelperTest < ActiveJob::TestCase
     product_test, task = setup_product_test_and_task_for_should_reload_measure_test_row_test
 
     # product test with :pending state should need reloading
-    assert_equal true, measure_test_running_for_row?(task)
+    assert_equal true, measure_test_running_for_row?(task, task.most_recent_execution, nil)
 
     # product test with :ready state should not need reloading
     product_test.state = :ready
     product_test.save!
-    assert_equal false, measure_test_running_for_row?(task)
+    assert_equal false, measure_test_running_for_row?(task, task.most_recent_execution, nil)
 
     # if task has a pending most recent execution then needs reloading
     execution = task.test_executions.create!(:state => :pending)
-    assert_equal true, measure_test_running_for_row?(task)
+    assert_equal true, measure_test_running_for_row?(task, task.most_recent_execution, nil)
 
     # if task has a passing most recent execution then does not need reloading
     execution.state = :passed
     execution.save!
-    assert_equal false, measure_test_running_for_row?(task)
+    sibling_execution = task.most_recent_execution ? task.most_recent_execution.sibling_execution : nil
+    assert_equal false, measure_test_running_for_row?(task, task.most_recent_execution, sibling_execution)
 
     # if execution has a sibling execution that is pending then needs reloading
     sibling_task = product_test.tasks.create!
     sibling_execution = sibling_task.test_executions.create!(:sibling_execution_id => execution.id, :state => :pending)
     execution.sibling_execution_id = sibling_execution.id
     execution.save!
-    assert_equal true, measure_test_running_for_row?(task)
+    assert_equal true, measure_test_running_for_row?(task, task.most_recent_execution, sibling_execution)
 
     # if both executions are finished then does not need reloading
     sibling_execution.state = :failed
     sibling_execution.save!
-    assert_equal false, measure_test_running_for_row?(task)
+    assert_equal false, measure_test_running_for_row?(task, task.most_recent_execution, sibling_execution)
   end
 
   def test_tasks_status

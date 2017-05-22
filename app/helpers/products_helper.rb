@@ -93,18 +93,11 @@ module ProductsHelper
     false
   end
 
-  def measure_test_running_for_row?(task)
+  def measure_test_running_for_row?(task, most_recent_execution, sibling_execution)
     return true unless [:ready, :errored].include? task.product_test.state
-    return true if task.most_recent_execution && task.most_recent_execution.status_with_sibling == 'incomplete'
-    false
-  end
-
-  # Takes a collection of tasks and determines if a measure test is running for any of the tasks.
-  # If one is then we need to be refreshing the measure tests table.
-  def should_reload_measure_test_table?(tasks)
-    tasks.each do |task|
-      return true if measure_test_running_for_row?(task)
-    end
+    # This does re-implement status_with_sibling. The reason for not using status_with_sibling directly is to avoid another call
+    # to the database and also try to avoid a race condition.
+    return true if most_recent_execution && (most_recent_execution.incomplete? || (sibling_execution && sibling_execution.incomplete?))
     false
   end
 

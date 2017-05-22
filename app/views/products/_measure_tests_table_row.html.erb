@@ -7,20 +7,20 @@
 #   sure we don't reload at the same time and double up on requests.
 %>
 
-<% parent_reloading = false unless (defined? parent_reloading) %>
-
 <% test = task.product_test %>
+<% most_recent_execution = task.most_recent_execution if most_recent_execution.nil? %>
+<% sibling_execution = most_recent_execution ? most_recent_execution.sibling_execution : nil if sibling_execution.nil? %>
+<% measure_test_running = measure_test_running_for_row?(task, most_recent_execution, sibling_execution) if measure_test_running.nil? %>
 <% include_c3 = test.product.c3_test %>
 
 <td data-sort="<%= cms_int(test.cms_id) %>"><%= test.cms_id %></td>
 <td><%= link_to test.name, new_task_test_execution_path(task) %></td>
 <% if include_first_task(test.product, task._type) %>
   <td data-order="<%= set_sorting(test, task.status) %>">
-    <%= render partial: 'execution_status_message', locals: { execution: task.most_recent_execution, test_state: test.state } %>
+    <%= render partial: 'execution_status_message', locals: { execution: most_recent_execution, test_state: test.state } %>
   </td>
 <% end %>
 <% if include_c3 %>
-  <% sibling_execution = task.most_recent_execution ? task.most_recent_execution.sibling_execution : nil %>
   <td data-order="<%= set_sorting(test, task.status) %>">
     <%= render partial: 'execution_status_message', locals: { execution: sibling_execution, test_state: test.state } %>
   </td>
@@ -33,7 +33,7 @@
 </td>
 
 <% # Only reload if the measure_tests_table isn't reloading for us. (This currently only happens in create.js.erb) %>
-<% if measure_test_running_for_row?(task) && !parent_reloading %>
+<% if measure_test_running %>
   <script>
     $(document).ready(function() {
       $.ajax({url: "<%= request.env['PATH_INFO'] %>", type: "GET", dataType: 'script', data: { partial: 'measure_tests_table_row', task_id: "<%= task.id.to_s %>" }});
