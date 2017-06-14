@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -12,7 +14,7 @@ gem 'os'
 
 gem 'health-data-standards', git: 'https://github.com/projectcypress/health-data-standards.git', branch: 'mongoid5'
 
-gem 'go-cda-tools', git: 'https://github.com/projectcypress/go-cda-tools.git', branch: 'master'
+gem 'go-cda-tools', git: 'https://github.com/projectcypress/go-cda-tools.git', branch: 'addGemspecDeps'
 # gem 'go-cda-tools', path: '../go-cda-tools'
 
 gem 'quality-measure-engine',

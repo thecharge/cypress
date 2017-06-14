@@ -19,10 +19,12 @@ GIT
 
 GIT
   remote: https://github.com/projectcypress/go-cda-tools.git
-  revision: d28de80126d7b380c67e662d6fc0973fdbd245c9
-  branch: master
+  revision: aa721c05990434e2a1836f5d8bdda9a388206466
+  branch: addGemspecDeps
   specs:
     go-cda-tools (0.0.0)
+      ffi (~> 1.9.10)
+      os (~> 0.9.6)
 
 GIT
   remote: https://github.com/projectcypress/health-data-standards.git
@@ -532,4 +534,4 @@ DEPENDENCIES
   web-console (~> 2.0)
 
 BUNDLED WITH
-   1.14.6
+   1.15.1
