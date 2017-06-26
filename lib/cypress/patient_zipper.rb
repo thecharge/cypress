@@ -22,10 +22,6 @@ module Cypress
   end
 
   class QRDAExporter
-    C3EXPORTER = GoCDATools::Export::GoExporter.instance
-    C3_1EXPORTER = GoCDATools::Export::GoExporter.instance
-    C4EXPORTER = GoCDATools::Export::GoExporter.instance
-
     attr_accessor :measures
     attr_accessor :start_time
     attr_accessor :end_time
@@ -43,17 +39,19 @@ module Cypress
     end
 
     def export(patient)
+      require 'go-cda-tools'
+
       cms_compatibility = patient.product_test && patient.product_test.product.c3_test
       case patient.bundle.qrda_version
       when 'r3'
-        C3EXPORTER.export_with_ffi(patient.to_json(:include => :provider), @measures_json, @valueset_json_map[patient.bundle.id],
-                                   start_time, end_time, 'r3', cms_compatibility)
+        GoCDATools::Export::GoExporter.export_with_ffi(patient.to_json(:include => :provider), @measures_json, @valueset_json_map[patient.bundle.id],
+                                                       start_time, end_time, 'r3', cms_compatibility)
       when 'r3_1'
-        C3_1EXPORTER.export_with_ffi(patient.to_json(:include => :provider), @measures_json, @valueset_json_map[patient.bundle.id],
-                                     start_time, end_time, 'r3_1', cms_compatibility)
+        GoCDATools::Export::GoExporter.export_with_ffi(patient.to_json(:include => :provider), @measures_json, @valueset_json_map[patient.bundle.id],
+                                                       start_time, end_time, 'r3_1', cms_compatibility)
       when 'r4'
-        C4EXPORTER.export_with_ffi(patient.to_json(:include => :provider), @measures_json, @valueset_json_map[patient.bundle.id],
-                                   start_time, end_time, 'r4', cms_compatibility)
+        GoCDATools::Export::GoExporter.export_with_ffi(patient.to_json(:include => :provider), @measures_json, @valueset_json_map[patient.bundle.id],
+                                                       start_time, end_time, 'r4', cms_compatibility)
       end
     end
   end

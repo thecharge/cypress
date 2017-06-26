@@ -19,8 +19,8 @@ GIT
 
 GIT
   remote: https://github.com/projectcypress/go-cda-tools.git
-  revision: a217d59546e2abc5abbcc528e70dcf9ef46dda1f
-  branch: master
+  revision: 9e4fc1c3a8fff7ef138a1c09d54f7178fe75b7da
+  branch: migrateToClassMethod
   specs:
     go-cda-tools (0.0.0)
       ffi (~> 1.9.10)
