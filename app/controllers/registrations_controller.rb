@@ -19,7 +19,7 @@ class RegistrationsController < Devise::RegistrationsController
   protected
 
   def load_test_executions
-    @test_executions = current_user.test_executions
+    @test_executions = current_user.test_executions.order([:updated_at, :desc]).limit(25)
   end
 
   def configure_permitted_parameters
