@@ -18,15 +18,6 @@ GIT
     bootstrap_form (2.4.0)
 
 GIT
-  remote: https://github.com/projectcypress/go-cda-tools.git
-  revision: 710fcc83f4859c510df7a15bf7af0ed36e61d0b4
-  branch: master
-  specs:
-    go-cda-tools (0.0.0)
-      ffi (~> 1.9.10)
-      os (~> 0.9.6)
-
-GIT
   remote: https://github.com/projectcypress/health-data-standards.git
   revision: e4804f6c4593291ddc4cb4b800e7360e270875c5
   branch: mongoid5
@@ -65,6 +56,13 @@ GIT
   specs:
     turbolinks (3.0.0)
       coffee-rails
+
+PATH
+  remote: ../go-cda-tools
+  specs:
+    go-cda-tools (0.0.0)
+      ffi (~> 1.9.10)
+      os (~> 0.9.6)
 
 GEM
   remote: https://rubygems.org/
