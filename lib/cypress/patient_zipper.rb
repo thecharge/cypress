@@ -19,10 +19,17 @@ module Cypress
     def export(patient)
       EXPORTER.export(patient, measures)
     end
+    def export_hds(patient)
+      EXPORTER.export(patient, measures)
+    end
   end
 
   class QRDAExporter
     QRDA_EXPORTER = GoCDATools::Export::GoExporter.instance
+
+    C3_HDSEXPORTER = HealthDataStandards::Export::Cat1.new('r3')
+    C3_1HDSEXPORTER = HealthDataStandards::Export::Cat1.new('r3_1')
+    C4_HDSEXPORTER = HealthDataStandards::Export::Cat1.new('r4')
 
     attr_accessor :measures
     attr_accessor :start_time
@@ -43,6 +50,19 @@ module Cypress
     def export(patient)
       cms_compatibility = patient.product_test && patient.product_test.product.c3_test
       QRDA_EXPORTER.export_with_ffi(patient.to_json(:include => :provider), start_time, end_time, patient.bundle.qrda_version, cms_compatibility)
+    end
+
+    def export_hds(patient)
+      cms_compatibility = patient.product_test && patient.product_test.product.c3_test
+      cms_compatible = true if patient.product_test && patient.product_test.product.c3_test
+      case patient.bundle.qrda_version
+      when 'r3'
+        C3_HDSEXPORTER.export(patient, measures, start_time, end_time, nil, 'r3', cms_compatible)
+      when 'r3_1'
+        C3_1HDSEXPORTER.export(patient, measures, start_time, end_time, nil, 'r3_1', cms_compatible)
+      when 'r4'
+        C4_HDSEXPORTER.export(patient, measures, start_time, end_time, nil, 'r4', cms_compatible)
+      end
     end
   end
 
@@ -71,6 +91,12 @@ module Cypress
                  formatter.new.export(patient)
                else
                  formatter.export(patient)
+               end
+          z.put_next_entry("hds/#{next_entry_path(patient, i)}.#{FORMAT_EXTENSIONS[format.to_sym]}")
+          z << if formatter == HealthDataStandards::Export::HTML
+                 formatter.new.export(patient)
+               else
+                 formatter.export_hds(patient)
                end
         end
       end
