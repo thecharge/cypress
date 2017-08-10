@@ -4,8 +4,8 @@
     "aws_secret_key": "",
     "default_user": "ubuntu",
     "default_pwd": "CypressPwd",
-    "cypress_version": "v3.2.0",
-    "cvu_version": "v3.2.0",
+    "cypress_version": "v3.2.1",
+    "cvu_version": "v3.2.1",
     "chef_version": "12.21",
     "vpc_id": "",
     "subnet_id": ""
@@ -89,10 +89,10 @@
       "type": "vmware-iso",
       "guest_os_type": "ubuntu-64",
       "iso_urls": [
-        "http://releases.ubuntu.com/16.04/ubuntu-16.04.2-server-amd64.iso",
-        "http://nl.releases.ubuntu.com/16.04/ubuntu-16.04.2-server-amd64.iso"
+        "http://releases.ubuntu.com/16.04/ubuntu-16.04.3-server-amd64.iso",
+        "http://nl.releases.ubuntu.com/16.04/ubuntu-16.04.3-server-amd64.iso"
       ],
-      "iso_checksum": "2bce60d18248df9980612619ff0b34e6",
+      "iso_checksum": "10fcd20619dce11fe094e960c85ba4a9",
       "iso_checksum_type": "md5",
       "ssh_username": "{{user `default_user`}}",
       "ssh_password": "{{user `default_pwd`}}",
@@ -147,10 +147,10 @@
       "type": "vmware-iso",
       "guest_os_type": "ubuntu-64",
       "iso_urls": [
-        "http://releases.ubuntu.com/16.04/ubuntu-16.04.2-server-amd64.iso",
-        "http://nl.releases.ubuntu.com/16.04/ubuntu-16.04.2-server-amd64.iso"
+        "http://releases.ubuntu.com/16.04/ubuntu-16.04.3-server-amd64.iso",
+        "http://nl.releases.ubuntu.com/16.04/ubuntu-16.04.3-server-amd64.iso"
       ],
-      "iso_checksum": "2bce60d18248df9980612619ff0b34e6",
+      "iso_checksum": "10fcd20619dce11fe094e960c85ba4a9",
       "iso_checksum_type": "md5",
       "ssh_username": "{{user `default_user`}}",
       "ssh_password": "{{user `default_pwd`}}",
@@ -205,10 +205,10 @@
       "type": "vmware-iso",
       "guest_os_type": "ubuntu-64",
       "iso_urls": [
-        "http://releases.ubuntu.com/16.04/ubuntu-16.04.2-server-amd64.iso",
-        "http://nl.releases.ubuntu.com/16.04/ubuntu-16.04.2-server-amd64.iso"
+        "http://releases.ubuntu.com/16.04/ubuntu-16.04.3-server-amd64.iso",
+        "http://nl.releases.ubuntu.com/16.04/ubuntu-16.04.3-server-amd64.iso"
       ],
-      "iso_checksum": "2bce60d18248df9980612619ff0b34e6",
+      "iso_checksum": "10fcd20619dce11fe094e960c85ba4a9",
       "iso_checksum_type": "md5",
       "ssh_username": "{{user `default_user`}}",
       "ssh_password": "{{user `default_pwd`}}",
