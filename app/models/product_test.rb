@@ -38,6 +38,7 @@ class ProductTest
   mount_uploader :html_archive, PatientArchiveUploader
 
   delegate :effective_date, :to => :product
+  delegate :measure_period_start, :to => :product
   delegate :bundle, :to => :product
 
   before_create :generate_random_seed
@@ -172,7 +173,7 @@ class ProductTest
   end
 
   def start_date
-    Time.at(bundle.measure_period_start).in_time_zone
+    Time.at(measure_period_start).in_time_zone
   end
 
   def end_date
