@@ -212,6 +212,7 @@ class ProductTest
       pcv.value['medical_record_id']
     end
     denom_ids.uniq!
+    denom_ids.keep_if { |id| id[8] == '-' }
 
     # If there are a lot of patients in denom_ids (usually when the IPP and denominator are the same thing),
     # pull out the numerator/Denex/Denexcep patients as high value, then sample from the rest to get to 60
@@ -236,6 +237,7 @@ class ProductTest
       pcv.value['medical_record_id']
     end
     msrpopl_ids.uniq!
+    msrpopl_ids.keep_if { |id| id[8] == '-' }
 
     # If there are a lot of patients in the MSRPOPL results above, (usually if there are a lot of MSRPOPLEX values)
     # pull out only those patients with more than one episode in the MSRPOPL
